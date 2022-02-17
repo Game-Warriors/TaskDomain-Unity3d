@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
-using TaskDomain.Abstraction;
+using GameWarriors.TaskDomain.Abstraction;
 using UnityEngine;
 
-namespace TaskDomain.Core
+namespace GameWarriors.TaskDomain.Core
 {
     public class TaskSystem : MonoBehaviour, ITaskRunner, IUpdateTask
     {
@@ -14,7 +14,6 @@ namespace TaskDomain.Core
         private int _updateCount;
         private int _lateUpdateCount;
         private int _fixedUpdateCount;
-
         private bool _updateEnable;
 
         [UnityEngine.Scripting.Preserve]
@@ -38,31 +37,31 @@ namespace TaskDomain.Core
             StopCoroutine(routine);
         }
 
-        public Coroutine StartCoroutineTask(IEnumerator routine, Action onDone)
+        Coroutine ITaskRunner.StartCoroutineTask(IEnumerator routine, Action onDone)
         {
             return StartCoroutine(YieldAndDone(routine, onDone));
         }
 
-        public Coroutine StartCoroutineTask(YieldInstruction instruction, Action callback)
+        Coroutine ITaskRunner.StartCoroutineTask(YieldInstruction instruction, Action callback)
         {
             return StartCoroutine(YieldAndDone(instruction, callback));
         }
 
-        public IEnumerator TaskToCoroutineAsync(Task task)
+        IEnumerator ITaskRunner.TaskToCoroutineAsync(Task task)
         {
             yield return new WaitUntil(() => task.IsCompleted);
         }
 
-        public IEnumerator TaskToCoroutineAsync<T>(Task<T> task)
+        IEnumerator ITaskRunner.TaskToCoroutineAsync<T>(Task<T> task)
         {
             yield return new WaitUntil(() => task.IsCompleted);
         }
 
-        public async Task CoroutineToTaskAsync(IEnumerator routine)
+        Task ITaskRunner.CoroutineToTaskAsync(IEnumerator routine)
         {
             TaskCompletionSource<bool> taskSource = new TaskCompletionSource<bool>();
             StartCoroutine(SignalOnCoroutineDone(routine, taskSource));
-            await taskSource.Task;
+            return taskSource.Task;
         }
 
         Coroutine ITaskRunner.DoNextFrame(Action callback)
@@ -80,30 +79,12 @@ namespace TaskDomain.Core
             return StartCoroutine(YieldAndDone(delay, callback));
         }
 
-        public void StopAllTasks()
+        void ITaskRunner.StopAllTasks()
         {
             StopAllCoroutines();
         }
 
-        private IEnumerator SignalOnCoroutineDone(IEnumerator coroutine, TaskCompletionSource<bool> taskSource)
-        {
-            yield return coroutine;
-            taskSource.TrySetResult(true);
-        }
-
-        private IEnumerator YieldAndDone(IEnumerator instruction, Action onDone)
-        {
-            yield return instruction;
-            onDone?.Invoke();
-        }
-
-        private IEnumerator YieldAndDone(YieldInstruction instruction, Action onDone)
-        {
-            yield return instruction;
-            onDone?.Invoke();
-        }
-
-        public int RegisterUpdateTask(Action updateAction)
+        int IUpdateTask.RegisterUpdateTask(Action updateAction)
         {
             if (_updateCount >= _updateArray.Length)
                 Array.Resize(ref _updateArray, _updateCount + 10);
@@ -111,7 +92,7 @@ namespace TaskDomain.Core
             return _updateCount++;
         }
 
-        public void UnRegisterUpdateTask(Action updateAction)
+        void IUpdateTask.UnRegisterUpdateTask(Action updateAction)
         {
             if (_updateCount == 0)
                 return;
@@ -134,7 +115,7 @@ namespace TaskDomain.Core
             }
         }
 
-        public int RegisterFixedUpdateTask(Action fixedUpdateAction)
+        int IUpdateTask.RegisterFixedUpdateTask(Action fixedUpdateAction)
         {
             if (_fixedUpdateCount >= _fixedUpdateArray.Length)
                 Array.Resize(ref _fixedUpdateArray, _fixedUpdateCount + 10);
@@ -142,7 +123,7 @@ namespace TaskDomain.Core
             return _fixedUpdateCount++;
         }
 
-        public void UnRegisterFixedUpdateTask(Action fixedUpdateAction)
+        void IUpdateTask.UnRegisterFixedUpdateTask(Action fixedUpdateAction)
         {
             if (_fixedUpdateCount == 0)
                 return;
@@ -165,7 +146,7 @@ namespace TaskDomain.Core
             }
         }
 
-        public int RegisterLateUpdateTask(Action lateUpdateAction)
+        int IUpdateTask.RegisterLateUpdateTask(Action lateUpdateAction)
         {
             if (_lateUpdateCount >= _lateUpdateArray.Length)
                 Array.Resize(ref _lateUpdateArray, _lateUpdateCount + 5);
@@ -173,7 +154,7 @@ namespace TaskDomain.Core
             return _lateUpdateCount++;
         }
 
-        public void UnRegisterLateUpdateeTask(Action lateUpdateAction)
+        void IUpdateTask.UnRegisterLateUpdateeTask(Action lateUpdateAction)
         {
             if (_lateUpdateCount == 0)
                 return;
@@ -233,6 +214,22 @@ namespace TaskDomain.Core
             {
                 _fixedUpdateArray[i]();
             }
+        }
+        private IEnumerator SignalOnCoroutineDone(IEnumerator coroutine, TaskCompletionSource<bool> taskSource)
+        {
+            yield return coroutine;
+            taskSource.TrySetResult(true);
+        }
+
+        private IEnumerator YieldAndDone(IEnumerator instruction, Action onDone)
+        {
+            yield return instruction;
+            onDone?.Invoke();
+        }
+        private IEnumerator YieldAndDone(YieldInstruction instruction, Action onDone)
+        {
+            yield return instruction;
+            onDone?.Invoke();
         }
     }
 }

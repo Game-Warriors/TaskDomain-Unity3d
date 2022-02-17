@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace TaskDomain.Abstraction
+namespace GameWarriors.TaskDomain.Abstraction
 {
     public interface ITaskRunner
     {
@@ -43,6 +43,6 @@ namespace TaskDomain.Abstraction
         /// <returns></returns>
         Task CoroutineToTaskAsync(IEnumerator coroutine);
         Coroutine DoNextFrame(Action action);
-
+        void StopAllTasks();
     }
 }

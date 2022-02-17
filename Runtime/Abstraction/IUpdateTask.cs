@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TaskDomain.Abstraction
+namespace GameWarriors.TaskDomain.Abstraction
 {
     public interface IUpdateTask
     {
