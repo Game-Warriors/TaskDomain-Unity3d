@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GameWarriors.TaskDomain.Core
 {
-    public class TaskSystem : MonoBehaviour, ITaskRunner, IUpdateTask
+    public class TaskSystem : MonoBehaviour, ITaskRunner, IUpdateTask, ITimerTask
     {
         private Action[] _updateArray;
         private Action[] _lateUpdateArray;
@@ -15,6 +15,8 @@ namespace GameWarriors.TaskDomain.Core
         private int _lateUpdateCount;
         private int _fixedUpdateCount;
         private bool _updateEnable;
+
+        private TimerTask _timerTask;
 
         [UnityEngine.Scripting.Preserve]
         public TaskSystem()
@@ -25,6 +27,7 @@ namespace GameWarriors.TaskDomain.Core
             _lateUpdateCount = 0;
             _fixedUpdateArray = new Action[5];
             _fixedUpdateCount = 0;
+            _timerTask = new TimerTask();
         }
 
         Coroutine ITaskRunner.StartCoroutineTask(IEnumerator routine)
@@ -99,7 +102,7 @@ namespace GameWarriors.TaskDomain.Core
 
             int length = _updateCount;
             int index = -1;
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < length; ++i)
             {
                 if (_updateArray[i] == updateAction)
                 {
@@ -195,6 +198,7 @@ namespace GameWarriors.TaskDomain.Core
             {
                 _updateArray[i]?.Invoke();
             }
+            _timerTask.SystemUpdate(Time.deltaTime);
         }
 
         private void LateUpdate()
@@ -230,6 +234,26 @@ namespace GameWarriors.TaskDomain.Core
         {
             yield return instruction;
             onDone?.Invoke();
+        }
+
+        public void StartLoopTimerTask(Action task, float interval)
+        {
+            _timerTask.StartLoopTimerTask(task, interval, 0);
+        }
+
+        public bool StopLoopTimerTask(Action task)
+        {
+            return _timerTask.StopLoopTimerTask(task);
+        }
+
+        public void StartRepeatTimerTask(Action task, float interval, int repeatCount)
+        {
+            _timerTask.StartRepeatTimerTask(task, interval, repeatCount);
+        }
+
+        public bool StopRepeatTimerTask(Action task)
+        {
+            return _timerTask.StopRepeatTimerTask(task);
         }
     }
 }
