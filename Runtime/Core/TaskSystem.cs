@@ -114,7 +114,7 @@ namespace GameWarriors.TaskDomain.Core
             if (index > -1)
             {
                 --_updateCount;
-                _updateArray[index] = _updateCount != index ? _updateArray[index] : null;
+                _updateArray[index] = _updateCount != index ? _updateArray[_updateCount] : null;
             }
         }
 
@@ -145,7 +145,7 @@ namespace GameWarriors.TaskDomain.Core
             if (index > -1)
             {
                 --_fixedUpdateCount;
-                _fixedUpdateArray[index] = _fixedUpdateCount != index ? _fixedUpdateArray[index] : null;
+                _fixedUpdateArray[index] = _fixedUpdateCount != index ? _fixedUpdateArray[_fixedUpdateCount] : null;
             }
         }
 
@@ -176,7 +176,7 @@ namespace GameWarriors.TaskDomain.Core
             if (index > -1)
             {
                 --_lateUpdateCount;
-                _lateUpdateArray[index] = _lateUpdateCount != index ? _lateUpdateArray[index] : null;
+                _lateUpdateArray[index] = _lateUpdateCount != index ? _lateUpdateArray[_lateUpdateCount] : null;
             }
         }
 

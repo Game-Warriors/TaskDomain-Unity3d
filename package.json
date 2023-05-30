@@ -1,6 +1,6 @@
 {
   "name": "com.gamewarriors.tasksystem",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "displayName": "Task System",
   "description": "This package provide structure to manage Update, FixedUpdate, LateUpdate, Coroutines by specific head domain class and functionalities can accessed by two UpdateTask and ITaskRunner interfaces. Also with this package, you can turn coroutins into a task and vice versa.",
   "unity": "2019.1",
