@@ -3,20 +3,23 @@ using System;
 
 namespace GameWarriors.TaskDomain.Data
 {
-    public struct LoopIntervalTask : ITaskAction
+    internal struct RepeatIntervalTask : ITaskAction
     {
         private readonly float _interval;
-        private Action _action;
+        private readonly Action _action;
         private double _buffer;
+        private short _repeatCount;
 
-        public bool IsValid => _action != null;
+        public bool IsValid => _repeatCount > 0;
         public Action ActionRef => _action;
+        public short RepeatCount => _repeatCount;
 
-        public LoopIntervalTask(Action action, float interval, double startTime)
+        public RepeatIntervalTask(Action action, float interval, short repeatCount)
         {
             _action = action;
             _interval = interval;
-            _buffer = startTime;
+            _buffer = 0;
+            _repeatCount = repeatCount;
         }
 
         public void Execute(double delta)
@@ -26,12 +29,13 @@ namespace GameWarriors.TaskDomain.Data
             {
                 _action();
                 _buffer -= _interval;
+                --_repeatCount;
             }
         }
 
         public void Clear()
         {
-            _action = null;
+            _repeatCount = 0;
         }
     }
 }

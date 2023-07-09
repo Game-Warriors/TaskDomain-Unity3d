@@ -11,7 +11,7 @@ namespace GameWarriors.TaskDomain.Abstraction
         void UnRegisterFixedUpdateTask(Action fixedUpdateAction);
 
         int RegisterLateUpdateTask(Action lateUpdateAction);
-        void UnRegisterLateUpdateeTask(Action lateUpdateAction);
+        void UnRegisterLateUpdateTask(Action lateUpdateAction);
 
         void EnableUpdate();
         void DisableUpdate();
