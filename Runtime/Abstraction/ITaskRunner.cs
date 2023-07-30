@@ -5,44 +5,79 @@ using UnityEngine;
 
 namespace GameWarriors.TaskDomain.Abstraction
 {
+    /// <summary>
+    /// The base abstraction to work with one time execution task by IEnumerator, Unity3d Coroutines and threading tasks
+    /// </summary>
     public interface ITaskRunner
     {
+        /// <summary>
+        /// Start Unity3D Coroutine by passed routine and return Coroutine reference
+        /// </summary>
+        /// <param name="routine">Intent routine to start</param>
+        /// <returns>started Unity3D Coroutine reference</returns>
         Coroutine StartCoroutineTask(IEnumerator routine);
 
         /// <summary>
-        /// Use as parameter for StartCoroutine() method.
-        /// e.g StartCoroutine( CoroutineWithCallback(method with IEnumerator return type, finish callback ) )
+        /// Start Unity3D Coroutine by passed routine and return Coroutine reference, call the action after completion
         /// </summary>
-        /// <param gameObjectName="routine"></param>
-        /// <param gameObjectName="callback"></param>
-        /// <returns></returns>
+        /// <param name="routine">Intent routine to start</param>
+        /// <param name="callback">Trigger action after routine completed</param>
+        /// <returns>>started Unity3D Coroutine reference</returns>
         Coroutine StartCoroutineTask(IEnumerator routine, Action callback);
 
-        Coroutine StartCoroutineTask(YieldInstruction instruction, Action callback);
         /// <summary>
-        /// Wraps task functionality into the coroutine scheme. 
+        /// Start Unity3D YieldInstruction by passed instruction and return Coroutine reference, call the action after completion
         /// </summary>
-        /// <param name="task"></param>
-        /// <returns></returns>
+        /// <param name="instruction">Intent instruction to start</param>
+        /// <param name="callback">Trigger action after routine completed</param>
+        /// <returns>>started Unity3D Coroutine reference</returns>
+        Coroutine StartCoroutineTask(YieldInstruction instruction, Action callback);
+
+        /// <summary>
+        /// Create the Coroutine which wraps task completion into the coroutine scheme. 
+        /// </summary>
+        /// <param name="task">Intent running task</param>
+        /// <returns>return IEnumerator that break when task completed</returns>
         IEnumerator TaskToCoroutineAsync(Task task);
+
+        /// <summary>
+        /// Create the Coroutine which wraps task completion into the coroutine scheme. 
+        /// </summary>
+        /// <param name="task">Intent running task</param>
+        /// <returns>return IEnumerator that break when task completed</returns>
+        IEnumerator TaskToCoroutineAsync<T>(Task<T> task);
+
+        /// <summary>
+        /// Stop and break the routine.
+        /// </summary>
+        /// <param name="routine">Intent routine to stop</param>
         void StopCoroutineTask(Coroutine routine);
 
         /// <summary>
-        /// Wraps task functionality into the coroutine scheme. 
+        /// Executing action after time delay.
         /// </summary>
-        /// <param name="task"></param>
-        /// <returns></returns>
-        IEnumerator TaskToCoroutineAsync<T>(Task<T> task);
+        /// <param name="delay">delay for execution in seconds</param>
+        /// <param name="action">Trigger the action after delay</param>
+        /// <returns>started Unity3D Coroutine reference</returns>
         Coroutine StartDelayTask(float delay, Action action);
-        Coroutine StartDelayTask(YieldInstruction delay, Action callback);
 
         /// <summary>
-        /// Wraps coroutine functionality into the async/task scheme. 
+        ///   Wraps coroutine functionality into the async/task scheme. 
         /// </summary>
-        /// <param name="coroutine"></param>
-        /// <returns></returns>
-        Task CoroutineToTaskAsync(IEnumerator coroutine);
+        /// <param name="routine">The routine will bind to task completion</param>
+        /// <returns>started task reference</returns>
+        Task CoroutineToTaskAsync(IEnumerator routine);
+
+        /// <summary>
+        /// Create the Coroutine that yield in current frame and execute next frame
+        /// </summary>
+        /// <param name="action">Trigger the action in next engine frame</param>
+        /// <returns>started Unity3D Coroutine reference</returns>
         Coroutine DoNextFrame(Action action);
+
+        /// <summary>
+        /// Stop all coroutines which start by this instance of task runner.
+        /// </summary>
         void StopAllTasks();
     }
 }

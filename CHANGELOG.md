@@ -1,8 +1,11 @@
+  version : 0.1.4
+  adding summaries and comments in library codes, implementing new pause and resume timer tasks feature.
+
   version : 0.1.3
-  add new repeat task feature to timer tasks
+  adding new repeat task feature to timer tasks.
 
   version : 0.1.2
-  fix unregister update, fixUpdate and lateUpdate bug
+  fix unregister update, fixedUpdate and lateUpdate bug.
 
   version : 0.1.1
-  add timer task abstraction and feature logic to task system
+  adding timer task abstraction and feature logic to task system.

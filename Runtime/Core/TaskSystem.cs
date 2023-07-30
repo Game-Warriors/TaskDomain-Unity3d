@@ -6,8 +6,13 @@ using UnityEngine;
 
 namespace GameWarriors.TaskDomain.Core
 {
+    /// <summary>
+    /// This class provide all system feature like: loop routine update,fixed update and lated update methods, running and control coroutines, time interval execution methods by limited or unlimited repeat count.
+    /// </summary>
     public class TaskSystem : MonoBehaviour, ITaskRunner, IUpdateTask, ITimerTask
     {
+        private readonly TimerTask _timerTask;
+
         private Action[] _updateArray;
         private Action[] _lateUpdateArray;
         private Action[] _fixedUpdateArray;
@@ -15,19 +20,20 @@ namespace GameWarriors.TaskDomain.Core
         private int _lateUpdateCount;
         private int _fixedUpdateCount;
         private bool _updateEnable;
+        private bool _isUpdateTimer;
 
-        private TimerTask _timerTask;
 
         [UnityEngine.Scripting.Preserve]
         public TaskSystem()
         {
             _updateArray = new Action[15];
             _updateCount = 0;
-            _lateUpdateArray = new Action[10];
+            _lateUpdateArray = new Action[5];
             _lateUpdateCount = 0;
-            _fixedUpdateArray = new Action[5];
+            _fixedUpdateArray = new Action[10];
             _fixedUpdateCount = 0;
             _timerTask = new TimerTask();
+            _isUpdateTimer = true;
         }
 
         Coroutine ITaskRunner.StartCoroutineTask(IEnumerator routine)
@@ -75,11 +81,6 @@ namespace GameWarriors.TaskDomain.Core
         Coroutine ITaskRunner.StartDelayTask(float delay, Action callback)
         {
             return StartCoroutine(YieldAndDone(new WaitForSeconds(delay), callback));
-        }
-
-        Coroutine ITaskRunner.StartDelayTask(YieldInstruction delay, Action callback)
-        {
-            return StartCoroutine(YieldAndDone(delay, callback));
         }
 
         void ITaskRunner.StopAllTasks()
@@ -213,13 +214,16 @@ namespace GameWarriors.TaskDomain.Core
 
         private void Update()
         {
-            if (!_updateEnable) return;
-            int length = _updateCount;
-            for (int i = 0; i < length; ++i)
+            if (_updateEnable)
             {
-                _updateArray[i]?.Invoke();
+                int length = _updateCount;
+                for (int i = 0; i < length; ++i)
+                {
+                    _updateArray[i]?.Invoke();
+                }
             }
-            _timerTask.SystemUpdate(Time.deltaTime);
+            if (_isUpdateTimer)
+                _timerTask.SystemUpdate(Time.deltaTime);
         }
 
         private void LateUpdate()
@@ -257,6 +261,26 @@ namespace GameWarriors.TaskDomain.Core
         {
             yield return instruction;
             onDone?.Invoke();
+        }
+
+        public bool IsLoopTimerTaskExist(Action task)
+        {
+            return _timerTask.IsLoopTimerTaskExist(task);
+        }
+
+        public bool IsRepeatTimerTaskExist(Action task)
+        {
+            return _timerTask.IsRepeatTimerTaskExist(task);
+        }
+
+        public void DisableAllTimer()
+        {
+            _isUpdateTimer = false;
+        }
+
+        public void EnableAllTimer()
+        {
+            _isUpdateTimer = true;
         }
     }
 }

@@ -68,5 +68,10 @@ namespace GameWarriors.TaskDomain.Core
             }
             _indexList.Clear();
         }
+
+        public bool IsExist(Action task)
+        {
+            return _taskTable.ContainsKey(task);
+        }
     }
 }

@@ -42,5 +42,15 @@ namespace GameWarriors.TaskDomain.Core
             _repeatTask.Update(deltaTime);
             _repeatTask.CleanUp();
         }
+
+        public bool IsLoopTimerTaskExist(Action task)
+        {
+            return _loopTask.IsExist(task);
+        }
+
+        public bool IsRepeatTimerTaskExist(Action task)
+        {
+            return _repeatTask.IsExist(task);
+        }
     }
 }
