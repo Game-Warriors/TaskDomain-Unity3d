@@ -7,7 +7,7 @@ using UnityEngine;
 namespace GameWarriors.TaskDomain.Core
 {
     /// <summary>
-    /// This class provide all system feature like: loop routine update,fixed update and lated update methods, running and control coroutines, time interval execution methods by limited or unlimited repeat count.
+    /// This class provide all system features like: loop routine update,fixed update and lated update methods, running and control coroutines, time interval execution methods by limited or unlimited repeat count.
     /// </summary>
     public class TaskSystem : MonoBehaviour, ITaskRunner, IUpdateTask, ITimerTask
     {
@@ -281,6 +281,43 @@ namespace GameWarriors.TaskDomain.Core
         public void EnableAllTimer()
         {
             _isUpdateTimer = true;
+        }
+
+        /// <summary>
+        /// Execute and simulate application on frame for update proccess
+        /// </summary>
+        /// <param name="deltaTime">frames delta time</param>
+        public void SimulateUpdateFrame(float deltaTime)
+        {
+            int length = _updateCount;
+            for (int i = 0; i < length; ++i)
+            {
+                _updateArray[i]?.Invoke();
+            }
+            _timerTask.SystemUpdate(deltaTime);
+        }
+
+        /// <summary>
+        /// Execute and simulate application on frame for fixed update proccess
+        /// </summary>
+        public void SimulateFixedUpdateFrame()
+        {
+            for (int i = 0; i < _fixedUpdateCount; ++i)
+            {
+                _fixedUpdateArray[i]();
+            }
+        }
+
+        /// <summary>
+        /// Execute and simulate application on frame for late update proccess
+        /// </summary>
+        public void SimulateLateUpdateFrame()
+        {
+            int length = _lateUpdateCount;
+            for (int i = 0; i < length; ++i)
+            {
+                _lateUpdateArray[i]();
+            }
         }
     }
 }

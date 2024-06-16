@@ -1,3 +1,6 @@
+  version : 0.1.5
+  adding update, fixed update and late update simulation method in task system for using in pipelines
+
   version : 0.1.4
   adding summaries and comments in library codes, implementing new pause and resume timer tasks feature.
 

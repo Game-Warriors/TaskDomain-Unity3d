@@ -3,10 +3,14 @@
 namespace GameWarriors.TaskDomain.Abstraction
 {
     /// <summary>
-    /// The base abstraction to work with loops like update, fixed, late.
+    /// The base abstraction to work with iterating loops like update, fixed, late methods.
     /// </summary>
     public interface IUpdateTask
     {
+        //bool IsUpdateTaskExist(Action updateAction);
+        //bool FixedUpdateTask(Action updateAction);
+        //bool LateUpdateTask(Action updateAction);
+
         /// <summary>
         /// Register action in update loop container.
         /// </summary>

@@ -29,14 +29,14 @@ namespace GameWarriors.TaskDomain.Abstraction
         void StartLoopTimerTask(Action task, float interval);
 
         /// <summary>
-        /// Removeing from loop timer task container and stop timer. if task not exist, ends operation without exception.
+        /// Remove from loop timer task container and stop timer. if task not exist, ends operation without exception.
         /// </summary>
         /// <param name="task">Intended task</param>
         /// <returns>return true if operation was success, false if operation failed or task not exist</returns>
         bool StopLoopTimerTask(Action task);
 
         /// <summary>
-        /// Register in repeat timer task container and start timer. if task not exist, ends operation without exception.
+        /// Register in repeat timer task container and start timer. if task does not exist, ends operation without exception.
         /// </summary>
         /// <param name="task">Intended task</param>
         /// <param name="interval">Time interval between each execution in seconds</param>
@@ -44,7 +44,7 @@ namespace GameWarriors.TaskDomain.Abstraction
         void StartRepeatTimerTask(Action task, float interval, int repeatCount);
 
         /// <summary>
-        /// Removeing from repeat timer task container and stop timer. if task not exist, ends operation without exception.
+        /// Remove from repeat timer task container and stop timer. if task does not exist, ends operation without exception.
         /// </summary>
         /// <param name="task">Intended task</param>
         /// <returns>return true if operation was success, false if operation failed or task not exist</returns>

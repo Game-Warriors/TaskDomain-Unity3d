@@ -6,7 +6,7 @@ using UnityEngine;
 namespace GameWarriors.TaskDomain.Abstraction
 {
     /// <summary>
-    /// The base abstraction to work with one time execution task by IEnumerator, Unity3d Coroutines and threading tasks
+    /// The base abstraction to work with one time execution task by IEnumerator, Unity3d Coroutines and threading tasks.
     /// </summary>
     public interface ITaskRunner
     {
@@ -62,14 +62,14 @@ namespace GameWarriors.TaskDomain.Abstraction
         Coroutine StartDelayTask(float delay, Action action);
 
         /// <summary>
-        ///   Wraps coroutine functionality into the async/task scheme. 
+        /// Create task completion source and bind the task completion to routine end\break state. 
         /// </summary>
         /// <param name="routine">The routine will bind to task completion</param>
         /// <returns>started task reference</returns>
         Task CoroutineToTaskAsync(IEnumerator routine);
 
         /// <summary>
-        /// Create the Coroutine that yield in current frame and execute next frame
+        /// Create the Coroutine that yield in current frame and execute next frame.
         /// </summary>
         /// <param name="action">Trigger the action in next engine frame</param>
         /// <returns>started Unity3D Coroutine reference</returns>

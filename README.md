@@ -59,6 +59,17 @@ private void Awake()
     TaskSystem taskSystem = new TaskSystem();
 }
 ```
+If the dependency injection library is used, the initialization process could be like following sample.
+```csharp
+private void Awake()
+{
+    serviceCollection = new ServiceCollection(INIT_METHOD_NAME);
+    serviceCollection.AddSingleton<ITimerTask, TaskSystem>();
+    serviceCollection.AddSingleton<IUpdateTask, TaskSystem>();
+    serviceCollection.AddSingleton<ITaskRunner, TaskSystem>();
+}
+```
+
 ## How To Use
 There are three abstraction which present system features. the “TaskSystem” class Implement all these abstractions.
 
