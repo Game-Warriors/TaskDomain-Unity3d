@@ -1,3 +1,6 @@
+  version : 0.1.6
+  fix task group index out of range bug
+
   version : 0.1.5
   adding update, fixed update and late update simulation method in task system for using in pipelines
 

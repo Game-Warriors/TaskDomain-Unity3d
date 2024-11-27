@@ -25,7 +25,7 @@ namespace GameWarriors.TaskDomain.Core
             if (input.ActionRef == null || _taskTable.ContainsKey(input.ActionRef))
                 return;
 
-            if (_counter > _tasks.Length)
+            if (_counter >= _tasks.Length)
                 Array.Resize(ref _tasks, _counter + 10);
             _tasks[_counter] = input;
             _taskTable.Add(input.ActionRef, _counter);
